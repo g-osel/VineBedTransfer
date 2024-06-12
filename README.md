@@ -2,7 +2,7 @@
 Supporting code for pneumatic robotics system for patient bed transfer
 
 ## Pressure Regulator Control
-Controls QB4 pressure regulator via 0-5V analog signal generated via PWM. Users input desired pressure via serial interface
+Controls QB4 pressure regulator via 0-5V analog signal generated via PWM. Users input desired pressure via serial interface. Feedback signal of pressure (0-5V) is measured, put through averaging filter, and displayed in serial
 
 ## TCW Peripheral
 Embedded electronics system in tip-clutching winches. Set up as a Bluetooth peripheral device and with a unique name, the system can receive commands via BLE to open and close winch
