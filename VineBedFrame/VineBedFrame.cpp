@@ -15,11 +15,14 @@ Written by: Sreela Kodali, kodali@stanford.edu
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */ 
 VineBedFrame::VineBedFrame(bool serial) {
-	
-	serialOn = serial; // false to turn serial off
+  
+  serialOn = serial; // false to turn serial off
   BLEService motorService("01D");
   motorServicePtr = &(motorService);
-	initializeSystem();
+  cmd allCommands[0] =  initializeCmd("individualMotor", motors_NONE);
+  cmd allCommands[1] =  initializeCmd("PreLoadValues", motors_ALL);
+  cmd allCommands[2] =  initializeCmd("executeCommand", motors_NONE);
+  initializeSystem();
 }
 
 
@@ -167,7 +170,7 @@ void VineBedFrame::executeCommand(unsigned long commandValue) {
 
 void VineBedFrame::defaultCommand(unsigned long commandValue, int i) {
     // DEFAULT BEHAVIOR FOR allBase, allTCWTurn, allBaseTCWTurn, individualMotors
-	unsigned long x = commandValue;
+  unsigned long x = commandValue;
     unsigned long z = (x & 0b11110000) >> 4;
     x = (x & 0b00001111);
     
@@ -240,7 +243,7 @@ cmd VineBedFrame::initializeCmd(char* s, int* m) {
 ---- VineBedFrame object is created */
 
 void VineBedFrame::initializeSystem() {
-	if (serialOn) {
+  if (serialOn) {
     Serial.begin(9600);
     while (!Serial);
   }

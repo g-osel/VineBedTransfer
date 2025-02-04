@@ -37,20 +37,21 @@ class VineBedFrame {
 		
 		// --- OBJECTS ---  //
 		Servo motorArr[N_ACT];
-		cmd allCommands[N_CMDS] = {
-		  // initializeCmd("allBase", motors_BASE),
-		  // initializeCmd("allTCWTurn", motors_TCW),
-		  initializeCmd("individualMotor", motors_NONE),
-		  initializeCmd("PreLoadValues", motors_ALL),
-		  initializeCmd("executeCommand", motors_NONE)
-		};
+		cmd allCommands[N_CMDS];
+		//  = {
+		//   // initializeCmd("allBase", motors_BASE),
+		//   // initializeCmd("allTCWTurn", motors_TCW),
+		//   initializeCmd("individualMotor", motors_NONE),
+		//   initializeCmd("PreLoadValues", motors_ALL),
+		//   initializeCmd("executeCommand", motors_NONE)
+		// };
 
 		bool serialOn;
-		int nVines;
-		int nTCWS;
-		int activeVines[3] = {5, 6, 7};
-		int activeTCWS[3] = {1, 2, 3};
-		int uSCommandValues[10] = { MOTOR_NEUTRAL, 1400, 1436, 1450, 1475, MOTOR_NEUTRAL, 1600, 1686, 1736, 1750};
+		const int nVines = 3;
+		const int nTCWS = 3;
+		const int activeVines[3] = {5, 6, 7};
+		const int activeTCWS[3] = {1, 2, 3};
+		const int uSCommandValues[10] = { MOTOR_NEUTRAL, 1400, 1436, 1450, 1475, MOTOR_NEUTRAL, 1600, 1686, 1736, 1750};
 
 		// FIX: note, can make these values for nVines nTCWS the default, perhaps can pass else 
 		// FIX: could even parameterize uSCommandValues and the pins
