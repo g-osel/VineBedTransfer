@@ -35,11 +35,11 @@ typedef enum {
   MOTOR_NEUTRAL_MID = 1513
 } MOTOR_LIMITS;
 
-const bool serialOn = false;
+const bool serialOn = true;
 const int nVines = 3;
 const int nTCWS = 3;
-const int activeVines[nVines] = {5, 6, 7};
-const int activeTCWS[nTCWS] = {1, 2, 3};
+const int activeVines[nVines] = {5, 7};
+const int activeTCWS[nTCWS] = {1, 3};
 const int maxParams = 4;  // Maximum parameters that can be sent in a single command
 //const int nVines = (sizeof(activeVines) / sizeof(activeVines[0]));
 //const int nTCWS = (sizeof(activeTCWS) / sizeof(activeTCWS[0]));
