@@ -773,7 +773,7 @@ void Knees(unsigned long commandValue) {
     Serial.println(commandValue);
   }
   // shifting 3 byte value one byte to the right so only
-  // 2 bytes and LSB is tcwSpeed
+  // 2 bytes and LSB is tcwSpeed  Ex: A73, 7 is TCW, 3 is Vine Base. Little endianness
   unsigned long tcwIdx = ((commandValue & 0xFF00) >> 12);  // mid byte
   unsigned long vineIdx = ((commandValue & 0x0F00) >> 8);  // lsb byte
   if (serialOn) {
