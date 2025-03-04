@@ -39,7 +39,7 @@ typedef enum {
   MOTOR_NEUTRAL_MID = 1513
 } MOTOR_LIMITS;
 
-const bool serialOn = true;
+const bool serialOn = false;
 const int nVines = 2;
 const int nTCWS = 2;
 const int activeVines[nVines] = { 3, 4 };
