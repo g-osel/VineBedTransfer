@@ -39,7 +39,7 @@ typedef enum {
   MOTOR_NEUTRAL_MID = 1513
 } MOTOR_LIMITS;
 
-const bool serialOn = false;
+const bool serialOn = true;
 const int nVines = 2;
 const int nTCWS = 2;
 const int activeVines[nVines] = { 3, 4 };
@@ -89,7 +89,7 @@ BLEService motorService("01D");  // Bluetooth® Low Energy, motorized device
 // If you'd like different values, feel free to change the content and/or length of USCommandVValues
 //const int uSCommandValues[10] = { MOTOR_NEUTRAL, MOTOR_MIN, 1185, 1285, 1385, MOTOR_NEUTRAL, 1650, 1750, 1850, MOTOR_MAX };
 //const int uSCommandValues[10] = { MOTOR_NEUTRAL, 1285, 1300, 1350, 1436, MOTOR_NEUTRAL, 1600, 1686, 1736, 1750};
-const int uSCommandValues[10] = { MOTOR_NEUTRAL, 1418, 1437, 1456, 1475, MOTOR_NEUTRAL, 1551, 1570, 1589, 1608 };
+const int uSCommandValues[10] = { MOTOR_NEUTRAL, 1418, 1437, 1456, 1475, MOTOR_NEUTRAL, 1551, 1570, 1589, 1608};
 
 //const int uSCommandValues[10] = { MOTOR_NEUTRAL, MOTOR_MIN, 1245, 1285, 1436, MOTOR_NEUTRAL, 1600, 1750, 1791, MOTOR_MAX };
 
@@ -758,6 +758,20 @@ void Shoulders(unsigned long commandValue) {
     Vinespeed = MOTOR_NEUTRAL_MID + (MOTOR_NEUTRAL_MID - uSCommandValues[vineIdx]);
   }
 
+  if (serialOn) {
+    Serial.print("TCW speed: ");
+    Serial.println(TCWspeed);
+    Serial.print("Vine speed: ");
+    Serial.println(Vinespeed);
+  }
+
+  if (serialOn) {
+    Serial.print("Active TCW: ");
+    Serial.println(activeTCWS[1]);
+    Serial.print("Active Vine: ");
+    Serial.println(activeVines[1]);
+  }
+
   motorArr[activeTCWS[1] - 1].writeMicroseconds(TCWspeed);
   motorArr[activeVines[1] - 1].writeMicroseconds(Vinespeed);
 
@@ -795,9 +809,9 @@ void Knees(unsigned long commandValue) {
 
   if (serialOn) {
     Serial.print("Active TCW: ");
-    Serial.println(activeTCWS[0] - 1);
+    Serial.println(activeTCWS[0]);
     Serial.print("Active Vine: ");
-    Serial.println(activeVines[0] - 1);
+    Serial.println(activeVines[0]);
   }
 
   motorArr[activeTCWS[0] - 1].writeMicroseconds(TCWspeed);
