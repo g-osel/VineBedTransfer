@@ -89,7 +89,7 @@ BLEService motorService("01D");  // Bluetooth® Low Energy, motorized device
 // If you'd like different values, feel free to change the content and/or length of USCommandVValues
 //const int uSCommandValues[10] = { MOTOR_NEUTRAL, MOTOR_MIN, 1185, 1285, 1385, MOTOR_NEUTRAL, 1650, 1750, 1850, MOTOR_MAX };
 //const int uSCommandValues[10] = { MOTOR_NEUTRAL, 1285, 1300, 1350, 1436, MOTOR_NEUTRAL, 1600, 1686, 1736, 1750};
-const int uSCommandValues[10] = { MOTOR_NEUTRAL, 1418, 1437, 1456, 1475, MOTOR_NEUTRAL, 1551, 1570, 1589, 1608};
+const int uSCommandValues[10] = { MOTOR_NEUTRAL, 1418, 1437, 1456, 1475, MOTOR_NEUTRAL_MID, 1551, 1570, 1589, 1608};
 
 //const int uSCommandValues[10] = { MOTOR_NEUTRAL, MOTOR_MIN, 1245, 1285, 1436, MOTOR_NEUTRAL, 1600, 1750, 1791, MOTOR_MAX };
 
