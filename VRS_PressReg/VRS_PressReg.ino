@@ -13,7 +13,8 @@ const float systemMax1 = 6; // MAX PRESSURE FOR REGULATOR 1
 const float systemMax2 = 6; // MAX PRESSURE FOR REGULATOR 2
 
 const int nPoints_movingAvg = 48;
-int average[nPoints_movingAvg];
+int average1[nPoints_movingAvg];
+int average2[nPoints_movingAvg];
 int count = 0;
 float averagedFeedback1 = 0.0;
 float averagedFeedback2 = 0.0;
@@ -56,19 +57,23 @@ void setup() {
   analogWrite(pressureCommandOUT2, PRESSURE_CMD_MIN);
 
   for (int i = 0; i < nPoints_movingAvg; i++ ) {
-    average[i] = 0;
+    average1[i] = 0;
+    average2[i] = 0;
   }
 }
 
 void loop() {
-  // Check and receive pressure commands
+  static unsigned long lastCmdTime = 0;
+  static unsigned long lastFeedbackTime = 0;
+
+  // Process commands if available
   if (Serial.available() > 0) {
     // Read the entire input from the serial port
     String inputString = Serial.readStringUntil('\n'); // Read until newline
 
     // Parse the input string for two float numbers
-    int commaIndex = inputString.indexOf(','); // Look for the comma
-    if (commaIndex > 0) { // Ensure there's a comma in the string
+    int commaIndex = inputString.indexOf(',');
+    if (commaIndex > 0) { 
       String command1String = inputString.substring(0, commaIndex);
       String command2String = inputString.substring(commaIndex + 1);
 
@@ -103,38 +108,41 @@ void loop() {
       analogWrite(pressureCommandOUT1, pwmCommand1);
       analogWrite(pressureCommandOUT2, pwmCommand2);
       
-      delay(t_SendCommands);
+      lastCmdTime = millis(); // Update command timestamp
     }
   }
 
-  // Measure raw value of pressure feedback and map it for both regulators
-  int rawFeedback1 = analogRead(pressureFeedbackIN1);
-  int rawFeedback2 = analogRead(pressureFeedbackIN2);
-  
-  // Update moving average
-  average[count] = (rawFeedback1 + rawFeedback2) / 2; // For simplicity, averaging both
-  count = (count + 1) % nPoints_movingAvg; // Wrap-around condition
-  float sum = 0.0;
+  // Measure feedback at regular intervals
+  if (millis() - lastFeedbackTime >= t_dataRate) {
+    int rawFeedback1 = analogRead(pressureFeedbackIN1);
+    int rawFeedback2 = analogRead(pressureFeedbackIN2);
 
-  for (int i = 0; i < nPoints_movingAvg; i++ ) {
-    sum += average[i];
+    // Update moving average for both regulators
+    average1[count] = rawFeedback1;
+    average2[count] = rawFeedback2;
+    count = (count + 1) % nPoints_movingAvg; // Wrap-around condition
+
+    float sum1 = 0.0;
+    float sum2 = 0.0;
+
+    for (int i = 0; i < nPoints_movingAvg; i++ ) {
+      sum1 += average1[i];
+      sum2 += average2[i];
+    }
+
+    averagedFeedback1 = sum1 / nPoints_movingAvg * regulatorMax1 / MAX_UNITS;
+    averagedFeedback2 = sum2 / nPoints_movingAvg * regulatorMax2 / MAX_UNITS;
+
+    Serial.println("Pressure Command 1: " + String(pressureCommand1) + 
+                   ", PWM Command 1: " + String(pwmCommand1) + 
+                   ", Pressure Measured 1: " + String(averagedFeedback1) + ", Pressure Command 2: " + String(pressureCommand2) + 
+                   ", PWM Command 2: " + String(pwmCommand2) + 
+                   ", Pressure Measured 2: " + String(averagedFeedback2));
+
+    lastFeedbackTime = millis(); // Update feedback timestamp
   }
-  averagedFeedback1 = (float)(rawFeedback1) / MAX_UNITS * regulatorMax1;
-  averagedFeedback2 = (float)(rawFeedback2) / MAX_UNITS * regulatorMax2;
-
-  Serial.println("Pressure Command 1: " + String(pressureCommand1) + 
-                 ", PWM Command 1: " + String(pwmCommand1) + 
-                 ", Pressure Measured 1: " + String(averagedFeedback1) + ", Pressure Command 2: " + String(pressureCommand2) + 
-                 ", PWM Command 2: " + String(pwmCommand2) + 
-                 ", Pressure Measured 2: " + String(averagedFeedback2));
-  // Serial.println("Pressure Command 2: " + String(pressureCommand2) + 
-  //                ", PWM Command 2: " + String(pwmCommand2) + 
-  //                ", Pressure Measured 2: " + String(averagedFeedback2));
-
-  delay(t_dataRate);
 }
 
-// The mapping function remains unchanged
 float mapFloat(bool type, float x, int int_min, int int_max, float float_min, float float_max) {
   float output;
   if (type) { 
