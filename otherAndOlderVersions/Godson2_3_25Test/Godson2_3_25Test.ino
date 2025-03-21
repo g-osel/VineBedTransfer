@@ -798,7 +798,9 @@ void Knees(unsigned long commandValue) {
   int TCWspeed = uSCommandValues[tcwIdx];
   int Vinespeed = uSCommandValues[vineIdx];
 
-
+  if (vineIdx != 0) {
+    Vinespeed = MOTOR_NEUTRAL_MID + (MOTOR_NEUTRAL_MID - uSCommandValues[vineIdx]);
+  }
 
   if (serialOn) {
     Serial.print("TCW speed: ");
