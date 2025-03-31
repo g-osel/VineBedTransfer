@@ -552,10 +552,10 @@ void AllVines(unsigned long commandValue) {
     int s = uSCommandValues[speedIdx];
     // for motors 4, flip the values
     if (speedIdx != 0) {
-      if ((activeVines[i] == 4)) {
+      // if ((activeVines[i] == 4)) {
         //speedIdx = 5 + (5 - speedIdx);
         s = MOTOR_NEUTRAL_MID + (MOTOR_NEUTRAL_MID - s);
-      }
+      // }
     }
     //    if (serialOn) {
     //      AASerial.println(activeVines[i]);
